@@ -9,10 +9,10 @@ import sys
 
 # from phi3_vision import Phi3VForCausalLM, Phi3VConfig, Phi3VProcessor
 from transformers import AutoProcessor, AutoModelForCausalLM
-from training.trainer import Phi3VTrainer
-from training.data import make_supervised_data_module
-from training.params import DataArguments, ModelArguments, TrainingArguments
-from training.train_utils import get_peft_state_maybe_zero_3, get_peft_state_non_lora_maybe_zero_3, safe_save_model_for_hf_trainer
+from trainer import Phi3VTrainer
+from data import make_supervised_data_module
+from params import DataArguments, ModelArguments, TrainingArguments
+from train_utils import get_peft_state_maybe_zero_3, get_peft_state_non_lora_maybe_zero_3, safe_save_model_for_hf_trainer
 import pathlib
 
 local_rank = None

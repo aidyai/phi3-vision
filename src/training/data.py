@@ -10,7 +10,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 from decord import VideoReader, cpu
 
-from .params import DataArguments
+from params import DataArguments
 
 IMAGE_TOKEN_INDEX = -200
 IGNORE_INDEX = -100
