@@ -1,31 +1,29 @@
-import argparse
-from utils import get_model_name_from_path, load_pretrained_model
+from huggingface_hub import HfApi, HfFolder
 
-def merge_lora(args):
-    model_name = get_model_name_from_path(args.model_path)
-    processor, model = load_pretrained_model(model_path=args.model_path, model_base=args.model_base,
-                                             model_name=model_name, device_map='cpu',
-                                             )
+def merge_lora(model_path, model_base, save_model_path, safe_serialization):
+    model_name = get_model_name_from_path(model_path)
+    processor, model = load_pretrained_model(
+        model_path=model_path, 
+        model_base=model_base,
+        model_name=model_name, 
+        device_map='cpu',
+    )
 
-    if args.safe_serialization:
+    if safe_serialization:
         state_dict = model.state_dict()
-        state_dict = {k:v for k, v in state_dict.items() if "wte" not in k}
-        model.save_pretrained(args.save_model_path, state_dict=state_dict, safe_serialization=True)
-        processor.save_pretrained(args.save_model_path)
-
-
+        state_dict = {k: v for k, v in state_dict.items() if "wte" not in k}
+        model.save_pretrained(save_model_path, state_dict=state_dict, safe_serialization=True)
+        processor.save_pretrained(save_model_path)
     else:
-        model.save_pretrained(args.save_model_path, safe_serialization=True)
-        processor.save_pretrained(args.save_model_path)
+        model.save_pretrained(save_model_path, safe_serialization=True)
+        processor.save_pretrained(save_model_path)
 
+# Set your parameters directly here
+model_path = "/workspace/auto-insurance/checkpoint-348/"
+#"/auto-insurance/checkpoint-348/adapter_model.safetensors"
+model_base = "microsoft/Phi-3-vision-128k-instruct"
+save_model_path = "./auto"
+safe_serialization = True
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model-path", type=str, required=True)
-    parser.add_argument("--model-base", type=str, required=True)
-    parser.add_argument("--save-model-path", type=str, required=True)
-    parser.add_argument("--safe-serialization", action='store_true')
-
-    args = parser.parse_args()
-
-    merge_lora(args)
+# Run the merge process
+merge_lora(model_path, model_base, save_model_path, safe_serialization)
