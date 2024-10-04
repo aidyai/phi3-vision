@@ -1,3 +1,4 @@
+from utils import get_model_name_from_path, load_pretrained_model
 from huggingface_hub import HfApi, HfFolder
 
 def merge_lora(model_path, model_base, save_model_path, safe_serialization):
